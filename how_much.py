@@ -10,7 +10,9 @@
 # and thus crashing Python (this is the 'dangerous' part)
 # see: https://docs.python.org/3/library/sys.html#sys.setrecursionlimit
 multiplication_factor = 100
-
+# Change False to True if you like to see the valid combinations (will slow the execution of this script down
+# by quite a lot since it's IO)
+print_combinations = False
 
 class Tree(object):
     def __init__(self, lower_bound, upper_bound, cup=None, parent=None):
@@ -68,9 +70,8 @@ def add_nodes(tree, cups):
             if 0 <= child.upper_bound <= (1 * multiplication_factor):
                 possible_combinations += 1
 
-                # Uncomment this line if you like to see the result (will slow the execution of this script down
-                # by quite a lot since it's IO)
-                # print(child.get_cups())
+                if print_combinations:
+                    print(child.get_cups())
             else:
                 # We only need to add nodes for all the cups that are equal to or lower
                 # then the current cup, thus we will create a new list (`new_cups`) that
