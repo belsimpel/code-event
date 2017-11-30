@@ -67,6 +67,10 @@ def add_nodes(tree, cups):
             # If this is the case, we got a valid combination
             if 0 <= child.upper_bound <= (1 * multiplication_factor):
                 possible_combinations += 1
+
+                # Uncomment this line if you like to see the result (will slow the execution of this script down
+                # by quite a lot since it's IO)
+                # print(child.get_cups())
             else:
                 # We only need to add nodes for all the cups that are equal to or lower
                 # then the current cup, thus we will create a new list (`new_cups`) that
