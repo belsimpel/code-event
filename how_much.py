@@ -1,3 +1,14 @@
+# If you get a recursion depth error, you could either increase the recursion depth
+# (see: https://stackoverflow.com/questions/5061582/setting-stacksize-in-a-python-script/16248113#16248113)
+# Or rewrite the code to be iterative.
+#
+# Note that increasing the recursion depth can be dangerous (mainly due to Python crashing, see below for more details),
+# but the standard limit is a little bit conservative.
+# (a copy pasta from the SO link above, works fine for example (on my machine)).
+#
+# The recursion depth is set as a guard to prevent infinite recursions from causing an overflow of the C stack
+# and thus crashing Python (this is the 'dangerous' part)
+# see: https://docs.python.org/3/library/sys.html#sys.setrecursionlimit
 possible_combinations = 0
 multiplication_factor = 100
 
@@ -59,7 +70,6 @@ def add_nodes(tree, cups):
                 # kinda redeemable to use it.
                 global possible_combinations
                 possible_combinations += 1
-                print(child.get_cups())
             else:
                 # We only need to add nodes for all the cups that are equal to or lower
                 # then the current cup, thus we will create a new list (`new_cups`) that
