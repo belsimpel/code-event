@@ -3,10 +3,29 @@ multiplication_factor = 100
 
 
 class Tree(object):
-    def __init__(self, lower_bound, upper_bound, parent = None):
+    def __init__(self, lower_bound, upper_bound, cup=None, parent=None):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.cup = cup
         self.parent = parent
+
+    def get_cups(self):
+        """
+        This method returns all the cups from the current node respecting all the cups
+        that were set in it's parents (so it will return a list containing all the cups
+        that were set up until (including) this node).
+
+        :return: A list containing all the set cups up until (including) this node.
+        """
+        if self.cup is None:
+            return []
+
+        cups = [self.cup]
+
+        if self.parent:
+            cups = cups + self.parent.get_cups()
+
+        return cups
 
 
 def get_possible_sizes():
@@ -28,7 +47,7 @@ def calculate_possible_combinations(cups, lower_bound, upper_bound):
 def add_nodes(tree, cups):
     for cup in cups:
         if cup <= tree.upper_bound:
-            child = Tree((tree.lower_bound - cup), (tree.upper_bound - cup), tree)
+            child = Tree((tree.lower_bound - cup), (tree.upper_bound - cup), cup, tree)
 
             # Because we were allowed to have an additional of 1 liter (so valid combinations are between
             # our target and our target + 1) the upper bound value of our child node is a valid leaf node
@@ -40,6 +59,7 @@ def add_nodes(tree, cups):
                 # kinda redeemable to use it.
                 global possible_combinations
                 possible_combinations += 1
+                print(child.get_cups())
             else:
                 # We only need to add nodes for all the cups that are equal to or lower
                 # then the current cup, thus we will create a new list (`new_cups`) that
