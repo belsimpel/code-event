@@ -9,7 +9,6 @@
 # The recursion depth is set as a guard to prevent infinite recursions from causing an overflow of the C stack
 # and thus crashing Python (this is the 'dangerous' part)
 # see: https://docs.python.org/3/library/sys.html#sys.setrecursionlimit
-possible_combinations = 0
 multiplication_factor = 100
 
 
@@ -50,12 +49,14 @@ def get_possible_sizes():
 def calculate_possible_combinations(cups, lower_bound, upper_bound):
     root = Tree(lower_bound, upper_bound)
 
-    add_nodes(root, cups)
+    possible_combinations = add_nodes(root, cups)
 
     print("A total of {0} combinations are possible.".format(possible_combinations))
 
 
 def add_nodes(tree, cups):
+    possible_combinations = 0
+
     for cup in cups:
         if cup <= tree.upper_bound:
             child = Tree((tree.lower_bound - cup), (tree.upper_bound - cup), cup, tree)
@@ -65,10 +66,6 @@ def add_nodes(tree, cups):
             # if it's between the 0 and 1 (respecting our multiplication factor)
             # If this is the case, we got a valid combination
             if 0 <= child.upper_bound <= (1 * multiplication_factor):
-                # Using global variables is not really nice, but it's super convenient
-                # in the context of this script, and since it's a one time thing, it's
-                # kinda redeemable to use it.
-                global possible_combinations
                 possible_combinations += 1
             else:
                 # We only need to add nodes for all the cups that are equal to or lower
@@ -78,9 +75,9 @@ def add_nodes(tree, cups):
                 # of storage. Thus we only need to check paths with decreasing numbers.
                 new_cups = [c for c in cups if c <= cup]
 
-                add_nodes(child, new_cups)
+                possible_combinations += add_nodes(child, new_cups)
 
-    return tree
+    return possible_combinations
 
 
 if __name__ == "__main__":
