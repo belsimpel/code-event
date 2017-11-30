@@ -1,3 +1,21 @@
+# How much
+# This was the most tricky one. We will explain how you could have solved this.
+#
+# You could for example bruteforce all the available options to see whether or not
+# the option would fall within the allowed range (with for example: https://docs.python.org/3/library/itertools.html)
+# However doing so would take hours/days (more time then there was available for the hackathon)
+# It would be possible to validate your script on a smaller amount (which you could prove by hand and then
+# use to validate that your program works), however then you wouldn't be able to generate the answer (due to time
+# constraints) with the bruteforce method.
+#
+# The option that we opted for is a Tree based structure, this because we can smartly traverse the tree / add nodes
+# to prevent excessive calculations / duplicate data. Another benefit of the tree structure is that we prevent a huge
+# dataset. There are some comments around the code to hopefully clarify some bits, but if things are unclear,
+# it helps if you draw the tree on paper (with smaller values, for example: 10L, and cups of sizes 5, 3 & 2,
+# this should result in 8 unique possible combinations).
+#
+# Below we have provided our example on how you could have solved this puzzle
+#
 # If you get a recursion depth error, you could either increase the recursion depth
 # (see: https://stackoverflow.com/questions/5061582/setting-stacksize-in-a-python-script/16248113#16248113)
 # Or rewrite the code to be iterative.
@@ -13,6 +31,7 @@ multiplication_factor = 100
 # Change False to True if you like to see the valid combinations (will slow the execution of this script down
 # by quite a lot since it's IO)
 print_combinations = False
+
 
 class Tree(object):
     def __init__(self, lower_bound, upper_bound, cup=None, parent=None):
