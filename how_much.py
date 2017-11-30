@@ -1,31 +1,3 @@
-# Too Much?
-# This was the most tricky one. We will explain how you could have resolved this.
-# Lets start with that it was impossible to solve this within two hours.
-# Even if you use a quite advanced algorithm like a tree, it takes hours to calculate all the options.
-# To win the points you had to be able to detect this, and have provided us with proof that it worked on for example 20
-# liters. We could check your code and run it with 10 liters to see if it matches our result.
-# The numbers given as `input` were way too big. Hence the title "Too Much?"
-
-## How to solve a problem like this?
-
-### Bruteforce
-# Using some libs (e.g. https://docs.python.org/3/library/itertools.html)
-# you could have generated all the possible combinations.
-# So lets say you have 250 liters as input, you can use 0-5 as a range for the 50 liter keg,
-# and 0-7 for the 35 liter keg (in the case of `itertools.product()`).
-# Then you generate a list of all the combinations of 50 and 35 liter kegs by looping
-# through them. Whilst you create them, you can test every combination and see if it is between the 250 and 251 liters
-# (remember, you can be one liter over).
-
-### A little bit smarter
-# Using a Tree pattern you can add a node for every valid combination.
-# By forming a tree you prevent
-# A: double data,
-# B: a huge dataset.
-# When using bounds in a smart way you only add "nodes" that are actually possible.
-# In the end you only have to count the nodes to get the amount of combinations you can make.
-# And loop through the generated nodes to create a list of options.
-# Below we have provided a basic setup with the tree pattern.
 possible_combinations = 0
 multiplication_factor = 100
 
@@ -69,7 +41,14 @@ def add_nodes(tree, cups):
                 global possible_combinations
                 possible_combinations += 1
             else:
-                add_nodes(child, cups)
+                # We only need to add nodes for all the cups that are equal to or lower
+                # then the current cup, thus we will create a new list (`new_cups`) that
+                # only contains values equal or lower to the current cup.
+                # This because (5, 3, 2) is the same as (3, 5, 2) in the case
+                # of storage. Thus we only need to check paths with decreasing numbers.
+                new_cups = [c for c in cups if c <= cup]
+
+                add_nodes(child, new_cups)
 
     return tree
 
